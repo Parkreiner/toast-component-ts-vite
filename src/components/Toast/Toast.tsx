@@ -21,7 +21,7 @@ type Props = PropsWithChildren<{
   variant: keyof typeof ICONS_BY_VARIANT;
 }>;
 
-export default function Toast({}: Props) {
+export default function Toast({ variant }: Props) {
   return (
     <div className={`${styles.toast} ${styles.notice}`}>
       <div className={styles.iconContainer}>

@@ -1,9 +1,40 @@
+import { useId, useState } from "react";
 import Button from "../Button";
 import styles from "./ToastPlayground.module.css";
 
-const VARIANT_OPTIONS = ["notice", "warning", "success", "error"] as const;
+const TOAST_VARIANTS = ["notice", "warning", "success", "error"] as const;
+type ToastVariant = typeof TOAST_VARIANTS[number];
 
 export default function ToastPlayground() {
+  const [draftMessage, setDraftMessage] = useState("");
+  const [selectedVariant, setSelectedVariant] = useState<ToastVariant>(
+    TOAST_VARIANTS[0]
+  );
+
+  const hookId = useId();
+  const textAreaId = `${hookId}-textarea`;
+
+  const radioButtons = TOAST_VARIANTS.map((variantType) => {
+    const inputId = `${hookId}-variant-${variantType}`;
+    const displayName =
+      variantType.slice(0, 1).toUpperCase() +
+      variantType.slice(1).toLowerCase();
+
+    return (
+      <label htmlFor={inputId}>
+        <input
+          id={inputId}
+          type="radio"
+          name="variant"
+          checked={variantType === selectedVariant}
+          onClick={() => setSelectedVariant(variantType)}
+          value={variantType}
+        />
+        {displayName}
+      </label>
+    );
+  });
+
   return (
     <div className={styles.wrapper}>
       <header>
@@ -14,31 +45,28 @@ export default function ToastPlayground() {
       <div className={styles.controlsWrapper}>
         <div className={styles.row}>
           <label
-            htmlFor="message"
+            htmlFor={textAreaId}
             className={styles.label}
             style={{ alignSelf: "baseline" }}
           >
             Message
           </label>
+
           <div className={styles.inputWrapper}>
-            <textarea id="message" className={styles.messageInput} />
+            <textarea
+              id={textAreaId}
+              className={styles.messageInput}
+              value={draftMessage}
+              onChange={(e) => setDraftMessage(e.target.value)}
+            />
           </div>
         </div>
 
         <div className={styles.row}>
           <div className={styles.label}>Variant</div>
-          <div className={`${styles.inputWrapper} ${styles.radioWrapper}`}>
-            <label htmlFor="variant-notice">
-              <input
-                id="variant-notice"
-                type="radio"
-                name="variant"
-                value="notice"
-              />
-              notice
-            </label>
 
-            {/* TODO Other Variant radio buttons here */}
+          <div className={`${styles.inputWrapper} ${styles.radioWrapper}`}>
+            {radioButtons}
           </div>
         </div>
 
