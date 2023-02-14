@@ -3,10 +3,10 @@ import Button from "../Button";
 import styles from "./ToastPlayground.module.css";
 
 const TOAST_VARIANTS = ["notice", "warning", "success", "error"] as const;
-type ToastVariant = typeof TOAST_VARIANTS[number];
+type ToastVariant = (typeof TOAST_VARIANTS)[number];
 
 export default function ToastPlayground() {
-  const [draftMessage, setDraftMessage] = useState("");
+  const [messageDraft, setMessageDraft] = useState("");
   const [selectedVariant, setSelectedVariant] = useState<ToastVariant>(
     TOAST_VARIANTS[0]
   );
@@ -56,8 +56,8 @@ export default function ToastPlayground() {
             <textarea
               id={textAreaId}
               className={styles.messageInput}
-              value={draftMessage}
-              onChange={(e) => setDraftMessage(e.target.value)}
+              value={messageDraft}
+              onChange={(e) => setMessageDraft(e.target.value)}
             />
           </div>
         </div>
