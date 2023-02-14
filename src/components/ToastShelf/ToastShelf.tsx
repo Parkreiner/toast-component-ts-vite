@@ -1,9 +1,7 @@
-import React from 'react';
+import Toast from "../Toast";
+import styles from "./ToastShelf.module.css";
 
-import Toast from '../Toast';
-import styles from './ToastShelf.module.css';
-
-function ToastShelf() {
+export default function ToastShelf() {
   return (
     <ol className={styles.wrapper}>
       <li className={styles.toastWrapper}>
@@ -15,5 +13,3 @@ function ToastShelf() {
     </ol>
   );
 }
-
-export default ToastShelf;
