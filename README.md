@@ -1,5 +1,9 @@
 # Toast Component Project
 
+This is a Vite+TypeScript fork of the Toast Exercise from Josh Comeau's [The Joy of React](https://www.joyofreact.com/). This fork is mainly intended for people who already have experience in TypeScript.
+
+If you do not know TypeScript yet, trying to juggle learning it on top of the main lesson might be too much at once. It might be better to do the original challenge in JavaScript, and then learn TypeScript on your own, over time. [The official TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html) is a great place to start learning.
+
 ## Joy of React, Project II
 
 In this project, we'll dive deep into the implementation of a single common UI component: A `<Toast>` message component.
@@ -8,9 +12,9 @@ In this project, we'll dive deep into the implementation of a single common UI c
 
 ## Getting Started
 
-This project is created with create-react-app. It's intended to be run locally, on your computer, using Node.js and NPM.
+This project is created with Vite. It's intended to be run locally, on your computer, using Node.js and NPM.
 
-During the first project, Wordle, we saw how to run a local development server. If you're not quite sure how to get started, I recommend reviewing the [“Local Development” instructions](https://courses.joshwcomeau.com/joy-of-react/project-wordle/03-dev-server) lesson.
+During the first project, Wordle, we saw how to run a local development server. Some of the instructions are different for Vite compared to create-react-app, but if you're not quite sure how to get started, I recommend reviewing the [“Local Development” instructions](https://courses.joshwcomeau.com/joy-of-react/project-wordle/03-dev-server) lesson.
 
 To jog your memory, here are the terminal commands you'll need to run:
 
@@ -19,15 +23,17 @@ To jog your memory, here are the terminal commands you'll need to run:
 npm install
 
 # Run a development server:
-npm run start
+npm run dev
 ```
 
 To create new components, you can use this helper script. It saves you a bit of time, creating all the files and adding the standard code:
 
 ```bash
-# Create a new component:
+# Create a new component - project will create TypeScript files by default
 npm run new-component [TheNewComponentName]
 ```
+
+Per the documentation on the [`new-component` repo](https://github.com/joshwcomeau/new-component), a `.new-component-config.json` file has been added to the directory. There is no need to pass additional command line arguments to the script – the script will look at this JSON file to decide what kinds of component files it should make.
 
 ---
 
@@ -37,7 +43,7 @@ In order to test our `Toast` component, we'll start by building a little playgro
 
 ![Image showing a textarea and set of radio buttons, along with a “Pop Toast!” radio button](./docs/playground.png)
 
-In `ToastPlayground.js`, you'll find most of the markup you'll need, but there are two problems:
+In `ToastPlayground.tsx`, you'll find most of the markup you'll need, but there are two problems:
 
 1. All of the inputs are _uncontrolled_, meaning we can't easily access their values in React. We should use React state to drive all form controls.
 2. We're only given a single radio button. We need one for each valid variant.
@@ -71,7 +77,7 @@ Here's what it should look like, when you've solved this exercise:
 
 For now, you can import the `Toast` component in `ToastPlayground` and render it between the header and the controls:
 
-```jsx
+```tsx
 <header>
   <img alt="Cute toast mascot" src="/toast.png" />
   <h1>Toast Playground</h1>
@@ -265,7 +271,7 @@ Let's build a **custom reusable hook** that makes it easy to reuse this boilerpl
 
 There are lots of different ways to tackle this, and there's no right or wrong answer, but here's one idea to get you started: what if we create a new custom hook called `useEscapeKey`?
 
-```js
+```ts
 useEscapeKey(() => {
   // Code to dismiss all toasts
 });
