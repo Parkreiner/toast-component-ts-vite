@@ -1,13 +1,12 @@
 import { useId, useState } from "react";
 import Button from "../Button";
-import Toast from "../Toast/Toast";
 import styles from "./ToastPlayground.module.css";
-
-const TOAST_VARIANTS = ["notice", "warning", "success", "error"] as const;
-type ToastVariant = (typeof TOAST_VARIANTS)[number];
+import useToasts from "../../hooks/useToasts";
+import { TOAST_VARIANTS, ToastVariant } from "../../typesAndConstants";
+import ToastShelf from "../ToastShelf";
 
 export default function ToastPlayground() {
-  const [toastVisible, setToastVisible] = useState(false);
+  const { toasts, addToast, dismissToast } = useToasts();
   const [messageDraft, setMessageDraft] = useState("");
   const [selectedVariant, setSelectedVariant] = useState<ToastVariant>(
     TOAST_VARIANTS[0]
@@ -16,26 +15,34 @@ export default function ToastPlayground() {
   const hookId = useId();
   const textAreaId = `${hookId}-textarea`;
 
-  const radioButtons = TOAST_VARIANTS.map((variantType) => {
+  const radioButtons = TOAST_VARIANTS.map((variantType, index) => {
     const inputId = `${hookId}-variant-${variantType}`;
     const displayName =
       variantType.slice(0, 1).toUpperCase() +
       variantType.slice(1).toLowerCase();
 
     return (
-      <label htmlFor={inputId}>
+      <label key={index} htmlFor={inputId}>
         <input
           id={inputId}
           type="radio"
           name="variant"
           checked={variantType === selectedVariant}
-          onClick={() => setSelectedVariant(variantType)}
+          onChange={() => setSelectedVariant(variantType)}
           value={variantType}
         />
         {displayName}
       </label>
     );
   });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setMessageDraft("");
+    setSelectedVariant(TOAST_VARIANTS[0]);
+    addToast(selectedVariant, messageDraft);
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -44,22 +51,9 @@ export default function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      {toastVisible && (
-        <Toast
-          variant={selectedVariant}
-          onDismiss={() => setToastVisible(!toastVisible)}
-        >
-          {messageDraft}
-        </Toast>
-      )}
+      <ToastShelf toasts={toasts} onDismiss={dismissToast} />
 
-      <form
-        className={styles.controlsWrapper}
-        onSubmit={(e) => {
-          e.preventDefault();
-          setToastVisible(true);
-        }}
-      >
+      <form className={styles.controlsWrapper} onSubmit={handleSubmit}>
         <div className={styles.row}>
           <label
             htmlFor={textAreaId}

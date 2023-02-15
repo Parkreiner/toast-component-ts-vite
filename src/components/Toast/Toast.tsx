@@ -1,5 +1,7 @@
-import { PropsWithChildren } from "react";
+import { FunctionComponent, PropsWithChildren } from "react";
+import { ToastVariant } from "../../typesAndConstants";
 import {
+  IconProps,
   AlertOctagon,
   AlertTriangle,
   CheckCircle,
@@ -15,11 +17,11 @@ const ICONS_BY_VARIANT = {
   warning: AlertTriangle,
   success: CheckCircle,
   error: AlertOctagon,
-} as const;
+} as const satisfies Record<ToastVariant, FunctionComponent<IconProps>>;
 
 type Props = PropsWithChildren<{
-  variant: keyof typeof ICONS_BY_VARIANT;
-  onDismiss?: () => void;
+  variant: ToastVariant;
+  onDismiss?: undefined | (() => void);
 }>;
 
 export default function Toast({ children, variant, onDismiss }: Props) {
