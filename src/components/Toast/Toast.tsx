@@ -19,16 +19,21 @@ const ICONS_BY_VARIANT = {
 
 type Props = PropsWithChildren<{
   variant: keyof typeof ICONS_BY_VARIANT;
+  onDismiss?: () => void;
 }>;
 
-export default function Toast({ variant }: Props) {
+export default function Toast({ children, variant, onDismiss }: Props) {
+  const IconComponent = ICONS_BY_VARIANT[variant];
+
   return (
-    <div className={`${styles.toast} ${styles.notice}`}>
+    <div className={`${styles.toast} ${styles[variant]}`}>
       <div className={styles.iconContainer}>
-        <Info size={24} />
+        <IconComponent size={24} />
       </div>
-      <p className={styles.content}>16 photos have been uploaded</p>
-      <button className={styles.closeButton}>
+
+      <p className={styles.content}>{children}</p>
+
+      <button className={styles.closeButton} onClick={onDismiss}>
         <X size={24} />
         <VisuallyHidden>Dismiss message</VisuallyHidden>
       </button>

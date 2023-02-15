@@ -1,11 +1,13 @@
 import { useId, useState } from "react";
 import Button from "../Button";
+import Toast from "../Toast/Toast";
 import styles from "./ToastPlayground.module.css";
 
 const TOAST_VARIANTS = ["notice", "warning", "success", "error"] as const;
 type ToastVariant = (typeof TOAST_VARIANTS)[number];
 
 export default function ToastPlayground() {
+  const [toastVisible, setToastVisible] = useState(false);
   const [messageDraft, setMessageDraft] = useState("");
   const [selectedVariant, setSelectedVariant] = useState<ToastVariant>(
     TOAST_VARIANTS[0]
@@ -42,7 +44,22 @@ export default function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      <div className={styles.controlsWrapper}>
+      {toastVisible && (
+        <Toast
+          variant={selectedVariant}
+          onDismiss={() => setToastVisible(!toastVisible)}
+        >
+          {messageDraft}
+        </Toast>
+      )}
+
+      <form
+        className={styles.controlsWrapper}
+        onSubmit={(e) => {
+          e.preventDefault();
+          setToastVisible(true);
+        }}
+      >
         <div className={styles.row}>
           <label
             htmlFor={textAreaId}
@@ -76,7 +93,7 @@ export default function ToastPlayground() {
             <Button>Pop Toast!</Button>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
