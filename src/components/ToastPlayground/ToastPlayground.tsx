@@ -1,12 +1,14 @@
 import { useId, useState } from "react";
 import Button from "../Button";
 import styles from "./ToastPlayground.module.css";
-import useToasts from "../../hooks/useToasts";
 import { TOAST_VARIANTS, ToastVariant } from "../../sharedTypesAndConstants";
 import ToastShelf from "../ToastShelf";
+import { useToasts, useToastUpdaters } from "../ToastProvider";
 
 export default function ToastPlayground() {
-  const { toasts, addToast, dismissToast } = useToasts();
+  const toasts = useToasts();
+  const { addToast, dismissToast } = useToastUpdaters();
+
   const [messageDraft, setMessageDraft] = useState("");
   const [selectedVariant, setSelectedVariant] = useState<ToastVariant>(
     TOAST_VARIANTS[0]
