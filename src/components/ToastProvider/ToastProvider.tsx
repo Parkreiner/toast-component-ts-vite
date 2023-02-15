@@ -5,17 +5,28 @@ import {
   useMemo,
   useContext,
   useCallback,
+  useRef,
 } from "react";
 import { ToastData, ToastVariant } from "../../sharedTypesAndConstants";
 
-const prevToastIds = new Set<string>();
+// This set is just here to satisfy TypeScript's type system. It's a weird hack,
+// but this set should never have any of its methods called
+const dummySet = new Set<string>();
 
 function useToastSetup() {
   const [toasts, setToasts] = useState<readonly ToastData[]>([]);
 
+  const mountRef = useRef(false);
+  const prevIdsRef = useRef(dummySet);
+  if (!mountRef.current) {
+    mountRef.current = true;
+    prevIdsRef.current = new Set();
+  }
+
   const addToast = useCallback((variant: ToastVariant, text: string) => {
     if (text.length === 0) return;
 
+    const prevToastIds = prevIdsRef.current;
     let newId = String(Math.random());
     while (prevToastIds.has(newId)) {
       newId = String(Math.random());
@@ -33,6 +44,8 @@ function useToastSetup() {
     });
   }, []);
 
+  // useMemo doesn't guarantee a 100% stable identity, even with an empty
+  // dependency array, which is why useCallback is being used together with it
   const updateMethods = useMemo(() => {
     return { addToast, dismissToast } as const;
   }, []);
