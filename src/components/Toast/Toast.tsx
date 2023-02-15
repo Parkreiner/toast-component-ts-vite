@@ -33,10 +33,12 @@ export default function Toast({ children, variant, onDismiss }: Props) {
 
       <p className={styles.content}>{children}</p>
 
-      <button className={styles.closeButton} onClick={onDismiss}>
-        <X size={24} />
-        <VisuallyHidden>Dismiss message</VisuallyHidden>
-      </button>
+      {typeof onDismiss === "function" && (
+        <button className={styles.closeButton} onClick={onDismiss}>
+          <X size={24} />
+          <VisuallyHidden>Dismiss message</VisuallyHidden>
+        </button>
+      )}
     </div>
   );
 }
