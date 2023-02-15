@@ -21,7 +21,7 @@ const ICONS_BY_VARIANT = {
 
 type Props = PropsWithChildren<{
   variant: ToastVariant;
-  onDismiss?: undefined | (() => void);
+  onDismiss?: () => void;
 }>;
 
 export default function Toast({ children, variant, onDismiss }: Props) {
