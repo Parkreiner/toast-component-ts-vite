@@ -38,6 +38,7 @@ export default function ToastPlayground() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (messageDraft === "") return;
 
     setMessageDraft("");
     setSelectedVariant(TOAST_VARIANTS[0]);
