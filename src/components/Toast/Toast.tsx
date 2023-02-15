@@ -1,5 +1,5 @@
 import { FunctionComponent, PropsWithChildren } from "react";
-import { ToastVariant } from "../../typesAndConstants";
+import { ToastVariant } from "../../sharedTypesAndConstants";
 import {
   IconProps,
   AlertOctagon,

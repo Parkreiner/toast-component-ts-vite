@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from "react";
-import { ToastData, ToastVariant } from "../typesAndConstants";
+import { ToastData, ToastVariant } from "../sharedTypesAndConstants";
 
 export default function useToasts() {
   const [toasts, setToasts] = useState<readonly ToastData[]>([]);

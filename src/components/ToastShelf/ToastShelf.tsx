@@ -1,4 +1,4 @@
-import { ToastData } from "../../typesAndConstants";
+import { ToastData } from "../../sharedTypesAndConstants";
 import Toast from "../Toast";
 import styles from "./ToastShelf.module.css";
 

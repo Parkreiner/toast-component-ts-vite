@@ -2,7 +2,7 @@ import { useId, useState } from "react";
 import Button from "../Button";
 import styles from "./ToastPlayground.module.css";
 import useToasts from "../../hooks/useToasts";
-import { TOAST_VARIANTS, ToastVariant } from "../../typesAndConstants";
+import { TOAST_VARIANTS, ToastVariant } from "../../sharedTypesAndConstants";
 import ToastShelf from "../ToastShelf";
 
 export default function ToastPlayground() {
