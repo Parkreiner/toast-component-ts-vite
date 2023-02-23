@@ -40,14 +40,14 @@ function useToastSetup() {
     });
   }, []);
 
-  const dismissAll = useCallback(() => {
+  const dismissAllToasts = useCallback(() => {
     setToasts([]);
   }, []);
 
   // useMemo doesn't guarantee a 100% stable identity, even with an empty
   // dependency array, which is why useCallback is being used together with it
   const updateMethods = useMemo(() => {
-    return { addToast, dismissToast, dismissAll } as const;
+    return { addToast, dismissToast, dismissAllToasts } as const;
   }, []);
 
   return { toasts, updateMethods } as const;

@@ -9,8 +9,8 @@ import { TOAST_VARIANTS, ToastVariant } from "../../sharedTypesAndConstants";
 
 export default function ToastPlayground() {
   const toasts = useToasts();
-  const { addToast, dismissToast, dismissAll } = useToastUpdaters();
-  useGlobalKeydown("Escape", dismissAll);
+  const { addToast, dismissToast, dismissAllToasts } = useToastUpdaters();
+  useGlobalKeydown("Escape", dismissAllToasts);
 
   const [messageDraft, setMessageDraft] = useState("");
   const [selectedVariant, setSelectedVariant] = useState<ToastVariant>(
@@ -19,6 +19,15 @@ export default function ToastPlayground() {
 
   const hookId = useId();
   const textAreaId = `${hookId}-textarea`;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (messageDraft === "") return;
+
+    setMessageDraft("");
+    setSelectedVariant(TOAST_VARIANTS[0]);
+    addToast(selectedVariant, messageDraft);
+  };
 
   const radioButtons = TOAST_VARIANTS.map((variantType, index) => {
     const inputId = `${hookId}-variant-${variantType}`;
@@ -40,15 +49,6 @@ export default function ToastPlayground() {
       </label>
     );
   });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (messageDraft === "") return;
-
-    setMessageDraft("");
-    setSelectedVariant(TOAST_VARIANTS[0]);
-    addToast(selectedVariant, messageDraft);
-  };
 
   return (
     <div className={styles.wrapper}>
