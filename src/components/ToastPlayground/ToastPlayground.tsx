@@ -1,13 +1,16 @@
 import { useId, useState } from "react";
 import Button from "../Button";
 import styles from "./ToastPlayground.module.css";
-import { TOAST_VARIANTS, ToastVariant } from "../../sharedTypesAndConstants";
+
 import ToastShelf from "../ToastShelf";
+import useGlobalKeydown from "../../hooks/useGlobalKeydown";
 import { useToasts, useToastUpdaters } from "../ToastProvider";
+import { TOAST_VARIANTS, ToastVariant } from "../../sharedTypesAndConstants";
 
 export default function ToastPlayground() {
   const toasts = useToasts();
-  const { addToast, dismissToast } = useToastUpdaters();
+  const { addToast, dismissToast, dismissAll } = useToastUpdaters();
+  useGlobalKeydown("Escape", dismissAll);
 
   const [messageDraft, setMessageDraft] = useState("");
   const [selectedVariant, setSelectedVariant] = useState<ToastVariant>(

@@ -9,45 +9,45 @@ import {
 } from "react";
 import { ToastData, ToastVariant } from "../../sharedTypesAndConstants";
 
-// This set is just here to satisfy TypeScript's type system. It's a weird hack,
-// but this set should never have any of its methods called
-const dummySet = new Set<string>();
-
 function useToastSetup() {
   const [toasts, setToasts] = useState<readonly ToastData[]>([]);
 
-  const mountRef = useRef(false);
-  const prevIdsRef = useRef(dummySet);
-  if (!mountRef.current) {
-    mountRef.current = true;
+  // The Set isn't moved outside the hook, because then that makes the hook have
+  // weird singleton behavior
+  const prevIdsRef = useRef<Set<string> | null>(null);
+  if (prevIdsRef.current === null) {
     prevIdsRef.current = new Set();
   }
 
   const addToast = useCallback((variant: ToastVariant, text: string) => {
-    if (text.length === 0) return;
-
+    if (text.length === 0 || prevIdsRef.current === null) return;
     const prevToastIds = prevIdsRef.current;
-    let newId = String(Math.random());
-    while (prevToastIds.has(newId)) {
-      newId = String(Math.random());
-    }
+
+    let newId: string;
+    do {
+      newId = String(Math.random()).slice(2);
+    } while (prevToastIds.has(newId));
 
     const newToast = { variant, text, id: newId };
     prevToastIds.add(newId);
-    setToasts((prevToasts) => [...prevToasts, newToast]);
+    setToasts((currentToasts) => [...currentToasts, newToast]);
   }, []);
 
   const dismissToast = useCallback((toastIndex: number) => {
-    setToasts((prevToasts) => {
-      const removed = prevToasts.filter((_, index) => index !== toastIndex);
-      return removed.length < prevToasts.length ? removed : prevToasts;
+    setToasts((currentToasts) => {
+      const removed = currentToasts.filter((_, index) => index !== toastIndex);
+      return removed.length < currentToasts.length ? removed : currentToasts;
     });
+  }, []);
+
+  const dismissAll = useCallback(() => {
+    setToasts([]);
   }, []);
 
   // useMemo doesn't guarantee a 100% stable identity, even with an empty
   // dependency array, which is why useCallback is being used together with it
   const updateMethods = useMemo(() => {
-    return { addToast, dismissToast } as const;
+    return { addToast, dismissToast, dismissAll } as const;
   }, []);
 
   return { toasts, updateMethods } as const;
